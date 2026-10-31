@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inscrição — Pequenos Herdeiros Chicago</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<a class="logo" href="index.html"><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"> Pequenos Herdeiros</a>
+<nav><a href="index.html">Início</a><a href="sobre.html">Sobre</a><a href="calendario.html">Calendário</a><a href="descubra.html">Descubra a classe</a><a href="lenco-uniforme.html">Lenço e uniforme</a><a class="active" href="inscricao.html">Inscrição</a><a href="contato.html">Contato</a></nav>
+</header>
+<main>
+<section>
+<h2>Inscrição / Enrollment </h2>
+<p>Preencha e envie. O formulário é gratuito e envia os dados para o e-mail do clube.</p>
+<div class="note"><p><strong>Prefere pelo WhatsApp?</strong> Você também pode se inscrever direto com a diretora Tânia: <a href="https://wa.me/16303291712" target="_blank" rel="noopener">WhatsApp da diretora</a>. O formulário envia para o e-mail do clube, aventureiroschicago@gmail.com. Na primeira inscrição, confirme o e-mail de ativação do FormSubmit que chegar nesse Gmail.</p></div>
+<form action="https://formsubmit.co/aventureiroschicago@gmail.com" method="POST">
+<input type="hidden" name="_subject" value="Nova inscrição — Aventureiros de Chicago">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_captcha" value="false">
+<label>Nome do pai/mãe ou responsável / Parent or guardian name</label><input name="responsavel" required>
+<label>E-mail do responsável / Guardian email</label><input type="email" name="email" required>
+<label>WhatsApp / Telefone / Phone</label><input name="telefone">
+<label>Nome da criança / Child name</label><input name="crianca" required>
+<label>Idade / Age</label><select name="idade" required><option value="">Escolher / Choose</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select>
+<label>Classe (se souber) / Class (if known)</label><select name="classe"><option value="">Não sei ainda / Not sure yet</option><option>Little Lamb — 4 anos</option><option>Eager Beaver — 5 anos</option><option>Busy Bee — 6 anos</option><option>Sun Beam — 7 anos</option><option>Builder — 8 anos</option><option>Helping Hand — 9 anos</option><option>Multilevel</option></select>
+<label>Mensagem / Message</label><textarea name="mensagem" rows="4" placeholder="Ex.: Queremos visitar no próximo encontro."></textarea>
+<button type="submit">Enviar inscrição </button>
+</form>
+</section>
+</main>
+<footer><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"><p><strong>Pequenos Herdeiros — Aventureiros de Chicago</strong> • @aventureiroschicago</p></footer>
+</body>
+</html>

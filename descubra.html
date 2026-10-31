@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Descubra a classe do seu filho — Pequenos Herdeiros Chicago</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>.age button{border:0;background:var(--blue);color:#fff;font-weight:900;padding:14px 20px;border-radius:999px;margin:5px;cursor:pointer;font-size:1.1rem}.age button:hover{background:var(--pink)}#ageResult{background:#fff;border-radius:20px;padding:24px;box-shadow:0 10px 24px rgba(0,0,0,.1);margin-top:16px}</style>
+</head>
+<body>
+<header>
+<a class="logo" href="index.html"><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"> Pequenos Herdeiros</a>
+<nav><a href="index.html">Início</a><a href="sobre.html">Sobre</a><a href="calendario.html">Calendário</a><a class="active" href="descubra.html">Descubra a classe</a><a href="inscricao.html">Inscrição</a><a href="contato.html">Contato</a></nav>
+</header>
+<main>
+<section>
+<h2>Descubra a classe do seu filho! </h2>
+<p>Toque na idade e veja <strong>o que ele vai aprender, quem são as professoras, e o lenço dele</strong>. / Tap the age to see what your child will learn, who the teachers are, and their scarf.</p>
+<div class="age">
+<button onclick="showClass(4)">4 anos</button>
+<button onclick="showClass(5)">5 anos</button>
+<button onclick="showClass(6)">6 anos</button>
+<button onclick="showClass(7)">7 anos</button>
+<button onclick="showClass(8)">8 anos</button>
+<button onclick="showClass(9)">9 anos</button>
+</div>
+<div id="ageResult">
+<p><strong>Escolha uma idade acima!</strong><br>Você vai ver a classe, as professoras, as especialidades do ano (My God, My Family, My World, My Self) e o lenço oficial do Aventureiro.</p>
+</div>
+<script>
+var classes={
+4:{nome:"Little Lamb — 4 anos",lenco:"Azul claro",prof:"Thaiane e Talita",apoio:"Apoio: Muriel",god:"Wooly Lamb • Little boy Jesus • Lost and Found",fam:"Special Helper • Healthy Me • Family Fun",world:"Insects • My friend Jesus • Music",self:"Sharing • Healthy Foods • Finger Play"},
+5:{nome:"Eager Beaver — 5 anos",lenco:"Bordô / vinho (com prendedor do clube)",prof:"Lays e Neuziane",apoio:"Apoio: Fabiana",god:"Beavers • Bible Friends • God's World",fam:"Pets • Helping at Home • Fire Safety",world:"Scavenger Hunt • Animals • Playing with Friends",self:"Alphabet Fun • Know your body • Shapes & Sizes"},
+6:{nome:"Busy Bee — 6 anos",lenco:"Bordô / vinho (com prendedor do clube)",prof:"Cleyde e Tânia (investidura 2026; confirmar turma atual com a diretora)",apoio:"No calendário atual, Busy Bee participa dos dias Multilevel, com Jader e João",god:"My God",fam:"My Family",world:"My World",self:"My Self"},
+7:{nome:"Sun Beam — 7 anos",lenco:"Bordô / vinho (com prendedor do clube)",prof:"Maru e Fernanda",apoio:"Apoio: Cleide",god:"Creation Award • Friend of Jesus • Made by God",fam:"Road Safety • I have a family • Family members care for each other",world:"Acts of Kindness • Courtesy • Seasons",self:"Handicraft • Cooking Fun • My Senses"},
+8:{nome:"Builder — 8 anos",lenco:"Bordô / vinho (com prendedor do clube)",prof:"A confirmar com a diretora",apoio:"No calendário atual, Builder participa dos dias Multilevel, com Jader e João",god:"My God",fam:"My Family",world:"My World",self:"My Self"},
+9:{nome:"Helping Hand — 9 anos",lenco:"Bordô / vinho (com prendedor do clube)",prof:"Joyle (investidura 2026; confirmar turma atual com a diretora)",apoio:"No calendário atual, Helping Hand participa dos dias Multilevel, com Jader e João",god:"My God",fam:"My Family",world:"My World",self:"My Self"}
+};
+function showClass(age){
+var c=classes[age];
+document.getElementById("ageResult").innerHTML=
+"<h3> "+c.nome+"</h3>"+
+"<p><strong> Professoras:</strong> "+c.prof+"<br>"+c.apoio+"<br><em>Equipe informada no grupo do clube em 15 de agosto de 2026. Em dias Multilevel, a turma é com Jader e João.</em></p>"+
+"<p><strong>Seu lenço:</strong> "+c.lenco+" — no formato triangular, com borda branca, prendedor e emblema.</p><img src='assets/lencos.svg' alt='Desenho dos dois lenços do Aventureiro, azul claro e bordô, em formato triangular' style='width:100%;max-width:560px;border-radius:16px'>"+
+"<p><strong> O que seu filho vai aprender neste ano:</strong></p>"+
+(c.god==="My God" ? "<p>Temas do ano: <strong>My God, My Family, My World, My Self</strong> — as especialidades específicas desta classe são confirmadas pela diretora na inscrição, pois o calendário atual do clube lista as especialidades nas colunas Little Lamb, Eager Beaver e Sun Beam, e reúne as demais turmas nos dias Multilevel.</p>" : "<ul><li><strong>My God:</strong> "+c.god+"</li><li><strong>My Family:</strong> "+c.fam+"</li><li><strong>My World:</strong> "+c.world+"</li><li><strong>My Self:</strong> "+c.self+"</li></ul>") +
+"<p>Cada especialidade vira uma insígnia na faixa do uniforme — uma conquista de verdade, celebrada na Investidura.</p>"+
+"<p><strong> O lenço dele:</strong> aqui nos EUA são dois: azul claro para Little Lamb / Discovery, e bordô / vinho para os Aventureiros, em formato triangular, com o emblema do clube. O bordô representa a realeza, filhos do Rei, e o sangue de Jesus para salvar cada criança e toda a família. <a href='lenco-uniforme.html'>Ver a história do lenço e do uniforme.</a></p>"+
+"<p><strong> Próximo encontro no calendário:</strong> 7 de novembro, 11:30h, 1032 Maple Ave, Downers Grove, IL 60515.</p>"+
+"<p><a class='btn btn-green' href='inscricao.html'>Quero inscrever meu filho nesta classe </a></p>";
+}
+</script>
+</section>
+<section>
+<h2>O lenço do Aventureiro </h2>
+<p>O lenço oficial é <strong>vinho/borgonha</strong>, triangular, com o emblema do clube. Ele não é só parte do uniforme: é o símbolo de pertencer ao clube, de fazer parte de uma família mundial de Aventureiros, e de lembrar todos os dias do amor de Jesus.</p>
+<p>No desenho acima, dá para ver os dois lenços: azul claro e bordô.</p>
+<img src="assets/lencos.svg" alt="Desenho dos dois lenços do Aventureiro nos EUA: azul claro e bordô" style="width:100%;max-width:640px;border-radius:20px">
+<p>Desenho do próprio lenço, em vez de foto. <a href="lenco-uniforme.html">Ver a história completa do lenço e do uniforme.</a></p>
+<p class="en">The official Adventurer scarf is burgundy/wine, triangular, with the club emblem — the worldwide symbol of an Adventurer.</p>
+</section>
+</main>
+<footer><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"><p><strong>Pequenos Herdeiros — Aventureiros de Chicago</strong> • @aventureiroschicago</p></footer>
+</body>
+</html>
