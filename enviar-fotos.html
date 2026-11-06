@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enviar fotos — Pequenos Herdeiros Chicago</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes wiggle{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}}
+.hero-fotos{background:linear-gradient(135deg,#12294d,#1573b8,#1f9d63);color:#fff;text-align:center;padding:36px 20px 30px;border-radius:0 0 32px 32px;animation:fadeUp .5s ease both}
+.hero-fotos img{width:150px;animation:floaty 3s ease-in-out infinite;filter:drop-shadow(0 12px 20px rgba(0,0,0,.35))}
+.hero-fotos h1{color:#fff;margin:10px 0 4px}
+.hero-fotos h1 em{color:#ffc400;font-style:normal}
+.date-pill{display:inline-block;background:#ffc400;color:#12294d;padding:8px 18px;border-radius:999px;font-weight:900;margin-top:10px;animation:pop .5s ease both}
+.drop{border:4px dashed #1573b8;border-radius:28px;padding:36px 20px;text-align:center;background:#eaf6ff;cursor:pointer;transition:transform .2s,background .2s;animation:fadeUp .6s ease both}
+.drop:hover,.drop.over{transform:scale(1.02);background:#fff3cd;border-color:#ffc400}
+.drop .big{font-size:3rem;animation:wiggle 2.5s ease-in-out infinite}
+.drop input{display:none}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pill-btn{background:#fff;border:2px solid #1573b8;color:#12294d;padding:10px 14px;border-radius:999px;font-weight:900;cursor:pointer;transition:transform .15s}
+.pill-btn:hover{transform:translateY(-2px)}
+.pill-btn.active{background:#12294d;color:#fff;border-color:#12294d;transform:scale(1.05)}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
+.thumbs img{width:100%;height:140px;object-fit:cover;border-radius:16px;animation:pop .3s ease both}
+.send-btn{width:100%;font-size:1.25rem;padding:18px;border-radius:999px;animation:fadeUp .7s ease both}
+.send-btn:disabled{opacity:.55;cursor:not-allowed}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="index.html"><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"> Pequenos Herdeiros</a>
+<nav><a href="index.html">Início</a><a href="sobre.html">Sobre</a><a href="calendario.html">Calendário</a><a href="inscricao.html">Inscrição</a><a href="contato.html">Contato</a></nav>
+</header>
+
+<div class="hero-fotos">
+<img src="assets/logo.png" alt="Logo Pequenos Herdeiros">
+<h1>Enviar <em>fotos</em></h1>
+<p>Sem formulário, sem login, sem senha. Só escolher as fotos e o dia do encontro.</p>
+<span class="date-pill" id="today-pill">Hoje: …</span>
+</div>
+
+<main>
+<section style="animation:fadeUp .6s ease both">
+<p style="text-align:center">As fotos chegam no e-mail do clube e a equipe aprova antes de publicar no site e no Instagram. Só envie fotos de crianças com autorização dos pais.</p>
+
+<form id="foto-form" action="https://formsubmit.co/aventureiroschicago@gmail.com" method="POST" enctype="multipart/form-data">
+<input type="hidden" name="_subject" value="Novas fotos — Aventureiros de Chicago">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="data_de_envio" id="data-envio">
+<input type="hidden" name="dia_do_evento" id="dia-evento-hidden" value="07/nov — My Family">
+
+<label class="drop" id="drop-zone">
+<span class="big">📸</span>
+<h3 style="margin:8px 0">Toque aqui para escolher as fotos</h3>
+<p style="margin:0">Ou arraste as fotos para cá. Pode escolher várias de uma vez.</p>
+<input type="file" id="foto-input" name="fotos" accept="image/*,video/*" multiple required>
+</label>
+<div class="thumbs" id="thumbs"></div>
+<p id="count-text" style="text-align:center;font-weight:900"></p>
+
+<h3>De qual encontro são as fotos?</h3>
+<p class="small">Escolha o dia. A data de hoje já vem preenchida sozinha.</p>
+<div class="pills" id="event-pills">
+<button type="button" class="pill-btn active" data-event="07/nov — My Family">07/nov • My Family</button>
+<button type="button" class="pill-btn" data-event="21/nov — My Family">21/nov • My Family</button>
+<button type="button" class="pill-btn" data-event="05/dez — My Family">05/dez • My Family</button>
+<button type="button" class="pill-btn" data-event="19/dez — Festa | Amigo Secreto">19/dez • Festa</button>
+<button type="button" class="pill-btn" data-event="02/jan — My World">02/jan • My World</button>
+<button type="button" class="pill-btn" data-event="16/jan — My World">16/jan • My World</button>
+<button type="button" class="pill-btn" data-event="06/fev — My World">06/fev • My World</button>
+<button type="button" class="pill-btn" data-event="20/fev — Multilevel">20/fev • Multilevel</button>
+<button type="button" class="pill-btn" data-event="06/mar — My Self">06/mar • My Self</button>
+<button type="button" class="pill-btn" data-event="01/mai — Investidura">01/mai • Investidura</button>
+<button type="button" class="pill-btn" data-event="15/mai — Acampamento">15/mai • Acampamento</button>
+<button type="button" class="pill-btn" data-event="Outro dia">Outro dia</button>
+</div>
+<div id="other-date" style="display:none">
+<label>Qual dia foi?</label>
+<input type="date" id="other-date-input">
+</div>
+
+<button class="send-btn" type="submit" id="send-btn" disabled>Enviar fotos</button>
+<p class="small" style="text-align:center">Ao enviar, você confirma que os pais autorizaram o uso destas fotos pelo clube.</p>
+</form>
+<p style="text-align:center"><a class="btn" href="index.html">Voltar para o site</a></p>
+</section>
+</main>
+<footer><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"><p><strong>Pequenos Herdeiros — Aventureiros de Chicago</strong> • @aventureiroschicago</p></footer>
+
+<script>
+const today = new Date();
+const todayText = today.toLocaleDateString('pt-BR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+document.getElementById('today-pill').textContent = 'Hoje: ' + todayText;
+document.getElementById('data-envio').value = today.toISOString().slice(0,10);
+const input = document.getElementById('foto-input');
+const drop = document.getElementById('drop-zone');
+const thumbs = document.getElementById('thumbs');
+const countText = document.getElementById('count-text');
+const sendBtn = document.getElementById('send-btn');
+function showFiles(files){
+  thumbs.innerHTML='';
+  const list=[...files].filter(f=>f.type.startsWith('image/')||f.type.startsWith('video/'));
+  countText.textContent = list.length ? list.length + (list.length===1?' foto escolhida':' fotos escolhidas') : '';
+  sendBtn.disabled = !list.length;
+  list.forEach(f=>{
+    if(!f.type.startsWith('image/')) return;
+    const r=new FileReader();
+    r.onload=()=>{const im=document.createElement('img');im.src=r.result;im.alt=f.name;thumbs.appendChild(im);};
+    r.readAsDataURL(f);
+  });
+}
+input.addEventListener('change',()=>showFiles(input.files));
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>{input.files=e.dataTransfer.files;showFiles(input.files);});
+document.querySelectorAll('.pill-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const other = btn.dataset.event==='Outro dia';
+    document.getElementById('other-date').style.display = other ? 'block':'none';
+    document.getElementById('dia-evento-hidden').value = other ? '' : btn.dataset.event;
+  });
+});
+document.getElementById('other-date-input').addEventListener('change',e=>{
+  document.getElementById('dia-evento-hidden').value = 'Outro dia: ' + e.target.value;
+});
+document.getElementById('foto-form').addEventListener('submit',()=>{
+  sendBtn.textContent='Enviando…'; sendBtn.disabled=true;
+});
+</script>
+</body>
+</html>

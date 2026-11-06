@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de Administração — Pequenos Herdeiros Chicago</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pop{0%{transform:scale(.97)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes shine{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.admin-wrap{max-width:1020px;margin:0 auto;padding:10px 20px 36px}
+.admin-hero{background:linear-gradient(135deg,#12294d,#1573b8,#1f9d63,#ffc400);background-size:300% 300%;animation:shine 10s ease infinite;color:#fff;border-radius:28px;padding:22px;text-align:center;margin-top:16px}
+.admin-hero img{width:110px;animation:floaty 3s ease-in-out infinite;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
+.admin-hero h2{color:#fff;margin:8px 0 4px}
+.admin-hero p{margin:0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.tab-btn{background:#fff;border:2px solid var(--navy);color:var(--navy);padding:10px 16px;border-radius:999px;font-weight:900;cursor:pointer;transition:transform .15s,background .15s}
+.tab-btn:hover{transform:translateY(-2px) scale(1.03)}
+.tab-btn.active{background:var(--navy);color:#fff;animation:pop .3s ease both}
+.tab-btn.main{background:var(--yellow);border-color:var(--yellow);color:#12294d}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeUp .4s ease both}
+.login-card{max-width:440px;margin:40px auto;background:#fff;border-radius:24px;padding:28px;box-shadow:0 14px 30px rgba(0,0,0,.12);text-align:center;animation:fadeUp .5s ease both}
+.login-card img{width:120px;animation:floaty 3s ease-in-out infinite}
+.small{font-size:.9rem;color:#42566a}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+.box{background:#fff;border-radius:22px;padding:20px;box-shadow:0 10px 24px rgba(0,0,0,.08);margin-bottom:16px;transition:transform .2s,box-shadow .2s;animation:fadeUp .4s ease both}
+.box:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,0,0,.14)}
+.box h3{margin-top:0}
+table{font-size:.95rem}
+.status{padding:6px;border-radius:8px;border:2px solid #dbe4ea}
+.badge{display:inline-block;background:#eaf6ff;padding:4px 10px;border-radius:999px;font-weight:900;font-size:.85rem}
+.btn-small{padding:8px 14px;font-size:.9rem;margin:4px 4px 4px 0}
+.danger{background:#c0392b;color:#fff;border:0;padding:8px 14px;border-radius:999px;font-weight:900;cursor:pointer}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.photo-grid img{width:100%;height:180px;object-fit:cover;border-radius:16px;transition:transform .2s}
+.photo-grid img:hover{transform:scale(1.04) rotate(-1deg)}
+.photo-grid figure{margin:0}
+.photo-grid figcaption{font-size:.85rem;font-weight:800;text-align:center;margin-top:6px}
+.highlight-preview{background:linear-gradient(135deg,#12294d,#1573b8);color:#fff;border-radius:24px;padding:24px;text-align:center}
+.highlight-preview img{width:100%;max-height:320px;object-fit:cover;border-radius:16px}
+.btn{transition:transform .15s}
+.btn:hover{transform:scale(1.04)}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="index.html"><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"> Pequenos Herdeiros</a>
+<nav><a href="index.html">Início</a><a href="calendario.html">Calendário</a><a href="inscricao.html">Inscrição</a><a href="contato.html">Contato</a></nav>
+</header>
+
+<main class="admin-wrap">
+<!-- LOGIN -->
+<section id="login-screen">
+<div class="login-card">
+<img src="assets/logo.png" alt="Logo Pequenos Herdeiros">
+<h2>Painel de Administração</h2>
+<p class="small">Área interna do clube. Não compartilhe a senha fora da equipe.</p>
+<div id="create-box" style="display:none">
+<p><strong>Primeiro acesso: crie a senha do painel</strong></p>
+<label style="text-align:left">Nova senha (mínimo 6 caracteres)</label>
+<input type="password" id="new-pass" autocomplete="new-password">
+<label style="text-align:left">Repita a senha</label>
+<input type="password" id="new-pass2" autocomplete="new-password">
+<button class="btn" type="button" onclick="createPassword()" style="background:var(--yellow);color:#12294d;border:0;cursor:pointer">Criar senha e entrar</button>
+<p class="small">A senha fica guardada neste navegador para este teste. Depois que você aprovar o painel, eu travo uma senha única no código para valer para toda a equipe.</p>
+</div>
+<div id="login-box" style="display:none">
+<label style="text-align:left">Senha do painel</label>
+<input type="password" id="login-pass" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+<button class="btn" type="button" onclick="doLogin()" style="background:var(--yellow);color:#12294d;border:0;cursor:pointer">Entrar</button>
+<p id="login-error" style="color:#c0392b;font-weight:900"></p>
+</div>
+<p class="small">Versão 1: os dados do painel ficam salvos neste navegador. Para a equipe toda ver o mesmo painel, o próximo passo é ligar um banco de dados gratuito.</p>
+</div>
+</section>
+
+<!-- PANEL -->
+<section id="panel-screen" style="display:none">
+<div class="admin-hero">
+<img src="assets/logo.png" alt="Logo Pequenos Herdeiros">
+<h2>Painel do clube</h2>
+<p>Secretária • Atividades • Ideias • Fotos • Destaques — tudo em um lugar, com alegria de criança.</p>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px">
+<div><a class="btn" href="index.html" style="background:#fff;color:var(--navy)">Ver o site</a> <button class="btn" type="button" onclick="logout()" style="background:#c0392b;color:#fff;border:0;cursor:pointer">Sair</button></div>
+</div>
+
+<div class="tabs">
+<button class="tab-btn active" onclick="showTab('secretaria',this)">Secretária</button>
+<button class="tab-btn" onclick="showTab('atividades',this)">Atividades</button>
+<button class="tab-btn" onclick="showTab('ideias',this)">Ideias</button>
+<button class="tab-btn main" onclick="showTab('fotos',this)">Fotos ★ principal</button>
+<button class="tab-btn" onclick="showTab('destaques',this)">Destaques</button>
+</div>
+
+<!-- SECRETARIA -->
+<div id="tab-secretaria" class="tab-panel active">
+<div class="box">
+<h3>Próximo encontro</h3>
+<p><span class="badge">NOV 07 • SÁBADO • 11:30h</span> <strong>My Family</strong> — 1032 Maple Ave, Downers Grove, IL 60515, na capela.</p>
+<p class="small">Little Lamb — Special Helper • Eager Beaver — Pets • Sun Beam — Road Safety. Busy Bee, Builder e Helping Hand: confirmar com a diretora, sem inventar especialidade.</p>
+<div class="links">
+<a href="https://mail.google.com/" target="_blank" rel="noopener">Abrir Gmail do clube — inscrições</a>
+<a href="contato.html">Contatos: diretora Tânia, pastor João Júnior, Instagram, Thaiane por último</a>
+<a href="calendario.html">Ver calendário completo</a>
+<a href="https://www.instagram.com/aventureiroschicago" target="_blank" rel="noopener">Instagram @aventureiroschicago</a>
+</div>
+</div>
+
+<div class="grid2">
+<div class="box">
+<h3>Criança nova</h3>
+<p class="small">Cadastre quem visitou ou se inscreveu. O nome completo fica só aqui dentro — no site e no Instagram, use só o primeiro nome e só com autorização dos pais.</p>
+<form onsubmit="addFamilia(event)">
+<label>Nome da criança</label><input id="f-crianca" required>
+<label>Idade</label><select id="f-idade"><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select>
+<label>Classe</label><select id="f-classe"><option>Little Lamb — 4</option><option>Eager Beaver — 5</option><option>Busy Bee — 6</option><option>Sun Beam — 7</option><option>Builder — 8</option><option>Helping Hand — 9</option><option>Multilevel</option></select>
+<label>Responsável</label><input id="f-resp" required>
+<label>WhatsApp do responsável</label><input id="f-tel">
+<label>E-mail do responsável</label><input id="f-email" type="email">
+<label>Data da visita</label><input id="f-visita" type="date">
+<button type="submit">Salvar criança nova</button>
+</form>
+</div>
+<div class="box">
+<h3>Como acompanhar</h3>
+<p>Depois de salvar, a família aparece na lista abaixo. Marque o status e anote o último contato.</p>
+<p><strong>Visitou 1x</strong> → mande mensagem em até 2 dias.<br><strong>Inscrita</strong> → confirme a classe e o próximo encontro.<br><strong>Precisa retorno</strong> → ligue ou mande WhatsApp.<br><strong>Acompanhando</strong> → família já está participando.</p>
+<button class="btn btn-green" type="button" onclick="exportCSV()" style="border:0;cursor:pointer">Exportar lista (CSV)</button>
+<p class="small">O CSV baixa um arquivo para você abrir no Excel / Planilhas.</p>
+</div>
+</div>
+
+<div class="box">
+<h3>Acompanhamento das famílias</h3>
+<div style="overflow-x:auto">
+<table><thead><tr><th>Criança</th><th>Idade / Classe</th><th>Responsável</th><th>Visita</th><th>Status</th><th>Último contato / Notas</th><th></th></tr></thead>
+<tbody id="familias-body"><tr><td colspan="7">Nenhuma família cadastrada ainda.</td></tr></tbody></table>
+</div>
+</div>
+</div>
+
+<!-- ATIVIDADES -->
+<div id="tab-atividades" class="tab-panel">
+<div class="box">
+<h3>Atividades — pelo calendário</h3>
+<p class="small">Encontros a cada duas semanas, sábados 11:30h. Adicione uma atividade extra sem apagar o calendário oficial.</p>
+<div style="overflow-x:auto">
+<table><thead><tr><th>Data</th><th>Atividade</th><th>Tema</th><th>Responsável</th><th></th></tr></thead>
+<tbody id="atividades-body"></tbody></table>
+</div>
+</div>
+<div class="box">
+<h3>Adicionar atividade</h3>
+<form onsubmit="addAtividade(event)">
+<label>Data</label><input id="a-data" type="date" required>
+<label>Título da atividade</label><input id="a-titulo" required placeholder="Ex.: Ensaio do hino / Gincana em família">
+<label>Tema / Bloco</label><select id="a-tema"><option>My God</option><option>My Family</option><option>My World</option><option>My Self</option><option>Especial</option></select>
+<label>Responsável</label><input id="a-resp" placeholder="Ex.: Tânia">
+<button type="submit">Salvar atividade</button>
+</form>
+</div>
+</div>
+
+<!-- IDEIAS -->
+<div id="tab-ideias" class="tab-panel">
+<div class="box">
+<h3>Ideias para o clube</h3>
+<p class="small">Anote ideias de encontro, reel, post, passeio ou novidade. Marque o status para não perder.</p>
+<form onsubmit="addIdeia(event)">
+<label>Título da ideia</label><input id="i-titulo" required placeholder="Ex.: Reel das crianças ajudando em casa">
+<label>Descrição</label><textarea id="i-desc" rows="3"></textarea>
+<label>Quem sugeriu</label><input id="i-quem">
+<label>Prioridade</label><select id="i-prio"><option>Normal</option><option>Alta</option><option>Para o próximo encontro</option></select>
+<button type="submit">Salvar ideia</button>
+</form>
+</div>
+<div class="box"><h3>Lista de ideias</h3><div id="ideias-list"><p class="small">Nenhuma ideia ainda.</p></div></div>
+</div>
+
+<!-- FOTOS -->
+<div id="tab-fotos" class="tab-panel">
+<div class="box" style="border:3px solid var(--yellow)">
+<h3>Fotos — principal ★</h3>
+<p><strong>Qualquer pessoa pode enviar fotos, sem login.</strong> O acesso compartilhado é só para as fotos. Secretária, atividades, ideias e destaques continuam só com a senha do painel.</p>
+<p>Como funciona: a pessoa abre a página de envio, manda as fotos e elas chegam no e-mail do clube para a equipe aprovar. Só depois de aprovadas elas entram no site e no Instagram. Não publique foto de criança sem autorização dos pais.</p>
+<p><a class="btn" href="enviar-fotos.html">Abrir página de envio de fotos</a>
+<button class="btn btn-green" type="button" onclick="copyPhotoLink()" style="border:0;cursor:pointer">Copiar link de envio</button>
+<span id="copy-ok" style="font-weight:900;color:var(--green)"></span></p>
+<p class="small">Link: <span id="photo-link-text"></span></p>
+</div>
+<div class="box">
+<h3>Galeria do site</h3>
+<div class="photo-grid">
+<figure><img src="assets/foto1.jpg" alt="Crianças brincando na casinha"><figcaption>Brincando na natureza</figcaption></figure>
+<figure><img src="assets/foto2.jpg" alt="Turma do clube"><figcaption>Turma do clube</figcaption></figure>
+<figure><img src="assets/foto-grupo-sorrindo.jpg" alt="Turma sorrindo com troféu"><figcaption>Turma sorrindo</figcaption></figure>
+<figure><img src="assets/foto7.jpg" alt="Família na investidura"><figcaption>Família na igreja</figcaption></figure>
+<figure><img src="assets/foto8.jpg" alt="Escorregador no parque"><figcaption>No parque</figcaption></figure>
+<figure><img src="assets/foto-brincando.jpg" alt="Criança rindo no inflável"><figcaption>Brincando e rindo</figcaption></figure>
+<figure><img src="assets/foto5.jpg" alt="Bolha de sabão"><figcaption>Bolha de sabão</figcaption></figure>
+<figure><img src="assets/foto3.jpg" alt="Investidura"><figcaption>Investidura</figcaption></figure>
+</div>
+</div>
+<div class="box">
+<h3>Adicionar foto aqui no painel (teste)</h3>
+<p class="small">Escolha fotos do seu aparelho para pré-visualizar. Nesta versão 1 elas ficam salvas só neste navegador, como rascunho, e não vão direto para o site — a versão pública é pelo envio por e-mail acima.</p>
+<input type="file" id="foto-input" accept="image/*" multiple onchange="addLocalPhotos(event)">
+<div class="photo-grid" id="local-photos" style="margin-top:12px"></div>
+</div>
+</div>
+
+<!-- DESTAQUES -->
+<div id="tab-destaques" class="tab-panel">
+<div class="box">
+<h3>Destaque da semana</h3>
+<p class="small">Escolha uma foto e um texto curto para destacar uma criança, uma família ou um momento do clube. Use só o primeiro nome e só com autorização dos pais.</p>
+<form onsubmit="addDestaque(event)">
+<label>Título do destaque</label><input id="d-titulo" required placeholder="Ex.: Nossa família da semana">
+<label>Texto curto</label><textarea id="d-texto" rows="3" required placeholder="Ex.: Uma família que chegou, ficou e já faz parte da nossa aventura."></textarea>
+<label>Foto</label><select id="d-foto"><option value="assets/foto7.jpg">Família na igreja — foto7</option><option value="assets/foto-grupo-sorrindo.jpg">Turma sorrindo — grupo</option><option value="assets/foto2.jpg">Turma do clube — foto2</option><option value="assets/foto1.jpg">Brincando na natureza — foto1</option><option value="assets/foto8.jpg">No parque — foto8</option><option value="assets/foto-brincando.jpg">Brincando e rindo — inflável</option></select>
+<label>Primeiro nome (opcional)</label><input id="d-nome" placeholder="Só o primeiro nome">
+<label><input type="checkbox" id="d-auth" required style="width:auto"> Os pais autorizaram usar esta foto e este destaque.</label>
+<button type="submit">Salvar destaque</button>
+</form>
+</div>
+<div class="box"><h3>Pré-visualização</h3><div id="destaque-preview"><p class="small">Salve um destaque para ver como ele fica.</p></div></div>
+<div class="box"><h3>Destaques salvos</h3><div id="destaques-list"><p class="small">Nenhum destaque ainda.</p></div></div>
+</div>
+
+<p class="small" style="text-align:center">Painel v1 — dados salvos neste navegador. Não publique nomes completos de crianças, escola ou endereço. Fotos só com autorização dos pais.</p>
+</section>
+</main>
+<footer><img src="assets/logo.png" alt="Logo Pequenos Herdeiros"><p><strong>Pequenos Herdeiros — Aventureiros de Chicago</strong> • @aventureiroschicago</p></footer>
+
+<script>
+async function sha256(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function showLogin(){
+  const has = localStorage.getItem('ph_admin_hash');
+  document.getElementById('login-screen').style.display='block';
+  document.getElementById('panel-screen').style.display='none';
+  document.getElementById('create-box').style.display = has ? 'none':'block';
+  document.getElementById('login-box').style.display = has ? 'block':'none';
+}
+function showPanel(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('panel-screen').style.display='block';
+  renderAll();
+}
+async function createPassword(){
+  const a=document.getElementById('new-pass').value, b=document.getElementById('new-pass2').value;
+  if(a.length<6){alert('A senha precisa ter pelo menos 6 caracteres.');return;}
+  if(a!==b){alert('As senhas não são iguais.');return;}
+  localStorage.setItem('ph_admin_hash', await sha256(a));
+  sessionStorage.setItem('ph_admin_logged','1');
+  showPanel();
+}
+async function doLogin(){
+  const v=document.getElementById('login-pass').value;
+  const h=await sha256(v);
+  if(h===localStorage.getItem('ph_admin_hash')){sessionStorage.setItem('ph_admin_logged','1');showPanel();}
+  else{document.getElementById('login-error').textContent='Senha incorreta. Tente de novo.';}
+}
+function logout(){sessionStorage.removeItem('ph_admin_logged');location.reload();}
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+}
+function load(key,fallback){try{return JSON.parse(localStorage.getItem(key))||fallback;}catch(e){return fallback;}}
+function save(key,val){localStorage.setItem(key,JSON.stringify(val));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+// Famílias
+function addFamilia(e){
+  e.preventDefault();
+  const list=load('ph_familias',[]);
+  list.push({id:uid(),crianca:document.getElementById('f-crianca').value,idade:document.getElementById('f-idade').value,classe:document.getElementById('f-classe').value,resp:document.getElementById('f-resp').value,tel:document.getElementById('f-tel').value,email:document.getElementById('f-email').value,visita:document.getElementById('f-visita').value,status:'Visitou 1x',notas:''});
+  save('ph_familias',list); e.target.reset(); renderFamilias();
+}
+function renderFamilias(){
+  const list=load('ph_familias',[]);
+  const body=document.getElementById('familias-body');
+  if(!list.length){body.innerHTML='<tr><td colspan="7">Nenhuma família cadastrada ainda.</td></tr>';return;}
+  body.innerHTML=list.map(f=>`<tr><td><strong>${esc(f.crianca)}</strong></td><td>${esc(f.idade)} • ${esc(f.classe)}</td><td>${esc(f.resp)}<br><span class="small">${esc(f.tel||'')} ${esc(f.email||'')}</span></td><td>${esc(f.visita||'—')}</td><td><select class="status" onchange="setStatus('${f.id}',this.value)">${['Visitou 1x','Inscrita','Precisa retorno','Acompanhando'].map(s=>`<option ${s===f.status?'selected':''}>${s}</option>`).join('')}</select></td><td><input value="${esc(f.notas||'')}" placeholder="Último contato / notas" onchange="setNotas('${f.id}',this.value)" style="padding:8px"></td><td><button class="danger" type="button" onclick="delFamilia('${f.id}')">Excluir</button></td></tr>`).join('');
+}
+function setStatus(id,v){const l=load('ph_familias',[]);const f=l.find(x=>x.id===id);if(f){f.status=v;save('ph_familias',l);}}
+function setNotas(id,v){const l=load('ph_familias',[]);const f=l.find(x=>x.id===id);if(f){f.notas=v;save('ph_familias',l);}}
+function delFamilia(id){if(!confirm('Excluir esta família da lista?'))return;save('ph_familias',load('ph_familias',[]).filter(x=>x.id!==id));renderFamilias();}
+function exportCSV(){
+  const list=load('ph_familias',[]);
+  const rows=[['Crianca','Idade','Classe','Responsavel','WhatsApp','Email','Visita','Status','Notas']].concat(list.map(f=>[f.crianca,f.idade,f.classe,f.resp,f.tel,f.email,f.visita,f.status,f.notas]));
+  const csv=rows.map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='familias-pequenos-herdeiros.csv';a.click();
+}
+
+// Atividades
+const SEED_ATIV=[['2026-11-07','Encontro My Family','My Family','Tânia'],['2026-11-21','Encontro My Family','My Family','Tânia'],['2026-12-05','Encontro My Family','My Family','Tânia'],['2026-12-19','Festa de Confraternização | Amigo Secreto','My Family','Tânia'],['2027-01-02','Encontro My World','My World','Tânia']];
+function addAtividade(e){
+  e.preventDefault();
+  const list=load('ph_atividades',null) || SEED_ATIV.map(a=>({id:uid(),data:a[0],titulo:a[1],tema:a[2],resp:a[3]}));
+  list.push({id:uid(),data:document.getElementById('a-data').value,titulo:document.getElementById('a-titulo').value,tema:document.getElementById('a-tema').value,resp:document.getElementById('a-resp').value});
+  save('ph_atividades',list); e.target.reset(); renderAtividades();
+}
+function renderAtividades(){
+  let list=load('ph_atividades',null);
+  if(!list){list=SEED_ATIV.map(a=>({id:uid(),data:a[0],titulo:a[1],tema:a[2],resp:a[3]}));save('ph_atividades',list);}
+  list.sort((a,b)=>a.data.localeCompare(b.data));
+  document.getElementById('atividades-body').innerHTML=list.map(a=>`<tr><td>${esc(a.data)}</td><td><strong>${esc(a.titulo)}</strong></td><td>${esc(a.tema)}</td><td>${esc(a.resp||'')}</td><td><button class="danger" type="button" onclick="delAtividade('${a.id}')">Excluir</button></td></tr>`).join('');
+}
+function delAtividade(id){if(!confirm('Excluir esta atividade?'))return;save('ph_atividades',load('ph_atividades',[]).filter(x=>x.id!==id));renderAtividades();}
+
+// Ideias
+function addIdeia(e){
+  e.preventDefault();
+  const list=load('ph_ideias',[]);
+  list.unshift({id:uid(),titulo:document.getElementById('i-titulo').value,desc:document.getElementById('i-desc').value,quem:document.getElementById('i-quem').value,prio:document.getElementById('i-prio').value,status:'Nova'});
+  save('ph_ideias',list); e.target.reset(); renderIdeias();
+}
+function renderIdeias(){
+  const list=load('ph_ideias',[]);
+  const el=document.getElementById('ideias-list');
+  if(!list.length){el.innerHTML='<p class="small">Nenhuma ideia ainda.</p>';return;}
+  el.innerHTML=list.map(i=>`<div class="box"><strong>${esc(i.titulo)}</strong> <span class="badge">${esc(i.prio)}</span> <span class="badge">${esc(i.status)}</span><p>${esc(i.desc||'')}</p><p class="small">Sugerido por: ${esc(i.quem||'—')}</p><button class="btn-small btn" type="button" onclick="setIdeiaStatus('${i.id}','Em andamento')" style="background:var(--yellow);border:0;cursor:pointer">Em andamento</button><button class="btn-small btn-green btn" type="button" onclick="setIdeiaStatus('${i.id}','Feita')" style="border:0;cursor:pointer">Feita</button><button class="danger" type="button" onclick="delIdeia('${i.id}')">Excluir</button></div>`).join('');
+}
+function setIdeiaStatus(id,s){const l=load('ph_ideias',[]);const f=l.find(x=>x.id===id);if(f){f.status=s;save('ph_ideias',l);renderIdeias();}}
+function delIdeia(id){if(!confirm('Excluir esta ideia?'))return;save('ph_ideias',load('ph_ideias',[]).filter(x=>x.id!==id));renderIdeias();}
+
+// Fotos locais
+function addLocalPhotos(e){
+  const files=[...e.target.files];
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        const max=800; const ratio=Math.min(1,max/img.width);
+        canvas.width=img.width*ratio; canvas.height=img.height*ratio;
+        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+        const list=load('ph_fotos_local',[]);
+        list.push({id:uid(),name:file.name,data:canvas.toDataURL('image/jpeg',0.8)});
+        try{save('ph_fotos_local',list);}catch(err){alert('Esta foto é grande demais para salvar neste navegador. Envie pela página pública de fotos.');return;}
+        renderLocalPhotos();
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderLocalPhotos(){
+  const list=load('ph_fotos_local',[]);
+  document.getElementById('local-photos').innerHTML=list.map(p=>`<figure><img src="${p.data}" alt="${esc(p.name)}"><figcaption>${esc(p.name)}</figcaption></figure>`).join('');
+}
+function copyPhotoLink(){
+  const url=location.href.replace(/admin\.html.*$/,'')+'enviar-fotos.html';
+  navigator.clipboard.writeText(url).then(()=>{document.getElementById('copy-ok').textContent='Link copiado.';});
+}
+
+// Destaques
+function addDestaque(e){
+  e.preventDefault();
+  const list=load('ph_destaques',[]);
+  const d={id:uid(),titulo:document.getElementById('d-titulo').value,texto:document.getElementById('d-texto').value,foto:document.getElementById('d-foto').value,nome:document.getElementById('d-nome').value,atual:true};
+  list.forEach(x=>x.atual=false); list.unshift(d); save('ph_destaques',list); e.target.reset(); renderDestaques();
+}
+function renderDestaques(){
+  const list=load('ph_destaques',[]);
+  const prev=document.getElementById('destaque-preview');
+  const cur=list.find(x=>x.atual)||list[0];
+  prev.innerHTML=cur?`<div class="highlight-preview"><img src="${esc(cur.foto)}" alt="Foto do destaque"><h3 style="color:#fff">${esc(cur.titulo)}</h3><p>${esc(cur.texto)}</p>${cur.nome?`<p><strong>${esc(cur.nome)}</strong></p>`:''}</div>`:'<p class="small">Salve um destaque para ver como ele fica.</p>';
+  document.getElementById('destaques-list').innerHTML=list.length?list.map(d=>`<div class="box"><strong>${esc(d.titulo)}</strong> ${d.atual?'<span class="badge">Atual</span>':''}<p>${esc(d.texto)}</p><button class="btn-small btn" type="button" onclick="setDestaqueAtual('${d.id}')" style="background:var(--yellow);border:0;cursor:pointer">Usar como atual</button><button class="danger" type="button" onclick="delDestaque('${d.id}')">Excluir</button></div>`).join(''):'<p class="small">Nenhum destaque ainda.</p>';
+}
+function setDestaqueAtual(id){const l=load('ph_destaques',[]);l.forEach(x=>x.atual=(x.id===id));save('ph_destaques',l);renderDestaques();}
+function delDestaque(id){if(!confirm('Excluir este destaque?'))return;save('ph_destaques',load('ph_destaques',[]).filter(x=>x.id!==id));renderDestaques();}
+
+function renderAll(){renderFamilias();renderAtividades();renderIdeias();renderLocalPhotos();renderDestaques();document.getElementById('photo-link-text').textContent=location.href.replace(/admin\.html.*$/,'')+'enviar-fotos.html';}
+if(sessionStorage.getItem('ph_admin_logged')==='1'){showPanel();}else{showLogin();}
+</script>
+</body>
+</html>
