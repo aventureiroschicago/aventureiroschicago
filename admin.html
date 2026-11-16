@@ -59,6 +59,7 @@ table{font-size:.95rem}
 <img src="assets/logo.png" alt="Logo Pequenos Herdeiros">
 <h2>Painel de Administração</h2>
 <p class="small">Área interna do clube. Não compartilhe a senha fora da equipe.</p>
+<p id="login-aviso-provisorio" class="small" style="display:none">Acesso provisório da equipe — use o código que você recebeu. Ele será trocado pela senha definitiva.</p>
 <div id="create-box" style="display:none">
 <p><strong>Primeiro acesso: crie a senha do painel</strong></p>
 <label style="text-align:left">Nova senha (mínimo 6 caracteres)</label>
@@ -85,6 +86,7 @@ table{font-size:.95rem}
 <h2>Painel do clube</h2>
 <p>Secretária • Atividades • Ideias • Fotos • Destaques — tudo em um lugar, com alegria de criança.</p>
 </div>
+<p id="acesso-info" class="small" style="text-align:center"></p>
 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px">
 <div><a class="btn" href="index.html" style="background:#fff;color:var(--navy)">Ver o site</a> <button class="btn" type="button" onclick="logout()" style="background:#c0392b;color:#fff;border:0;cursor:pointer">Sair</button></div>
 </div>
@@ -242,16 +244,33 @@ async function sha256(str){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
+// ACESSOS PROVISÓRIOS — trocar pela senha definitiva depois.
+// Cada código é provisório: o hash fica visível no código público do
+// repositório, então estes códigos devem ser trocados/rotacionados logo.
+// Gerar com: python3 acessos-provisorios/gerar-acessos.py
+// (os códigos em texto claro vão SÓ por cartão seguro, nunca no chat)
+const PROVISIONAL_ACCESS = [
+  { label: 'Diretora', hash: 'SUBSTITUIR_PELO_HASH_DIRETORA' },
+  { label: 'Equipe', hash: 'SUBSTITUIR_PELO_HASH_EQUIPE' },
+  { label: 'Mídia', hash: 'SUBSTITUIR_PELO_HASH_MIDIA' },
+];
+
 function showLogin(){
   const has = localStorage.getItem('ph_admin_hash');
+  const prov = PROVISIONAL_ACCESS.some(a=>a.hash && !a.hash.startsWith('SUBSTITUIR'));
   document.getElementById('login-screen').style.display='block';
   document.getElementById('panel-screen').style.display='none';
-  document.getElementById('create-box').style.display = has ? 'none':'block';
-  document.getElementById('login-box').style.display = has ? 'block':'none';
+  document.getElementById('create-box').style.display = (has || prov) ? 'none':'block';
+  document.getElementById('login-box').style.display = (has || prov) ? 'block':'none';
+  const aviso = document.getElementById('login-aviso-provisorio');
+  if(aviso){ aviso.style.display = prov ? 'block' : 'none'; }
 }
 function showPanel(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('panel-screen').style.display='block';
+  const info = document.getElementById('acesso-info');
+  const rotulo = sessionStorage.getItem('ph_admin_acesso');
+  if(info){ info.textContent = rotulo ? ('Acesso provisório: ' + rotulo + ' — será trocado pela senha definitiva.') : ''; }
   renderAll();
 }
 async function createPassword(){
@@ -265,10 +284,12 @@ async function createPassword(){
 async function doLogin(){
   const v=document.getElementById('login-pass').value;
   const h=await sha256(v);
+  const prov=PROVISIONAL_ACCESS.find(a=>a.hash===h);
+  if(prov){sessionStorage.setItem('ph_admin_logged','1');sessionStorage.setItem('ph_admin_acesso',prov.label);showPanel();return;}
   if(h===localStorage.getItem('ph_admin_hash')){sessionStorage.setItem('ph_admin_logged','1');showPanel();}
   else{document.getElementById('login-error').textContent='Senha incorreta. Tente de novo.';}
 }
-function logout(){sessionStorage.removeItem('ph_admin_logged');location.reload();}
+function logout(){sessionStorage.removeItem('ph_admin_logged');sessionStorage.removeItem('ph_admin_acesso');location.reload();}
 function showTab(id,btn){
   document.querySelectorAll('.tab-panel').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
